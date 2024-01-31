@@ -8,5 +8,4 @@ mean = np.average(numbers)
 median = np.median(numbers)
 mode = stats.mode(numbers)
 
-print(mean, median, mode)
-
+print("Mean is = " + str(mean) + ", " "Median is = " + str(median) + ", " , "Mode is = " + str(mode))
