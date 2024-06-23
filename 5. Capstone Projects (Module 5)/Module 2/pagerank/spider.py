@@ -19,7 +19,7 @@ cur.execute('''CREATE TABLE IF NOT EXISTS Pages
      error INTEGER, old_rank REAL, new_rank REAL)''')
 
 cur.execute('''CREATE TABLE IF NOT EXISTS Links
-    (from_id INTEGER, to_id INTEGER, UNIQUE(from_id, to_id))''')
+    (from_id INTEGER, to_id INTEGER)''')
 
 cur.execute('''CREATE TABLE IF NOT EXISTS Webs (url TEXT UNIQUE)''')
 
@@ -84,6 +84,7 @@ while True:
         if 'text/html' != document.info().get_content_type() :
             print("Ignore non text/html page")
             cur.execute('DELETE FROM Pages WHERE url=?', ( url, ) )
+            cur.execute('UPDATE Pages SET error=0 WHERE url=?', (url, ) )
             conn.commit()
             continue
 
