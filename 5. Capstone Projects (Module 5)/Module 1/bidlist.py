@@ -1,4 +1,5 @@
 import sqlite3
+import csv
 
 conn = sqlite3.connect('bidlistdb.sqlite')
 cur = conn.cursor()
@@ -83,33 +84,20 @@ CREATE TABLE Full (
     id  INTEGER PRIMARY KEY,
     skill_id  INTEGER, grade_id INTEGER, name_id INTEGER, title_id INTEGER, location_id INTEGER, 
     alias_id INTEGER, length_id INTEGER, spoken_id INTEGER, percent_id INTEGER, date_id INTEGER,
-    person_id INTEGER, description_id INTEGER 
+    person_id INTEGER, description_id INTEGER
 );
 ''')
 
 # Open the CSV file with the correct encoding
 with open('2025BidList.csv', 'r', encoding='utf-8') as handle:
-    for line in handle:
-        line = line.strip()
-        pieces = line.split(',')
-        if len(pieces) < 12:
+    csv_reader = csv.reader(handle)
+    next(csv_reader)  # Skip the header row if there is one
+
+    for row in csv_reader:
+        if len(row) < 12:
             continue
 
-        skills = pieces[0]
-        grades = pieces[1]
-        bureaus = pieces[2]
-        organizations = pieces[3]
-        post_citys = pieces[4]
-        post_countrys = pieces[5]
-        tour_of_dutys = pieces[6]
-        languagess = pieces[7]
-        post_differentials = pieces[8]
-        teds = pieces[9]
-        incumbents = pieces[10]
-        capsule_descriptions = pieces[11]
-
-        print(skills, grades, bureaus, organizations, post_citys, post_countrys, tour_of_dutys, languagess, 
-              post_differentials, teds, incumbents, capsule_descriptions)
+        skills, grades, bureaus, organizations, post_citys, post_countrys, tour_of_dutys, languagess, post_differentials, teds, incumbents, capsule_descriptions = row
 
         cur.execute('''INSERT OR IGNORE INTO Skill (skill) VALUES ( ? )''', (skills, ))
         cur.execute('SELECT id FROM Skill WHERE skill = ? ', (skills, ))
